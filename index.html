@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Personal Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream: #F5F0E8;
+      --dark: #1A1A2E;
+      --accent: #C8963E;
+      --accent-light: #E8C87A;
+      --muted: #7A7A8C;
+      --white: #FFFFFF;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--cream);
+      color: var(--dark);
+      font-family: 'Architects Daughter', cursive;
+      overflow-x: hidden;
+    }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.5;
+    }
+
+    /* ─── HERO / PROFILE ─── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left {
+      background-color: var(--dark);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 60px;
+      position: relative;
+      clip-path: polygon(0 0, 92% 0, 100% 100%, 0 100%);
+    }
+
+    .hero-left::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      left: -100px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(200,150,62,0.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-family: 'Architects Daughter', cursive;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 6px 14px;
+      border-radius: 2px;
+      margin-bottom: 28px;
+      width: fit-content;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .hero-name {
+      font-family: 'Architects Daughter', cursive;
+      font-size: clamp(42px, 5vw, 72px);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.05;
+      margin-bottom: 20px;
+      animation: fadeUp 0.8s 0.15s ease both;
+    }
+
+    .hero-name span {
+      color: var(--accent);
+      display: block;
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      color: rgba(255,255,255,0.55);
+      font-weight: 300;
+      letter-spacing: 0.5px;
+      margin-bottom: 40px;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .hero-divider {
+      width: 60px;
+      height: 2px;
+      background: var(--accent);
+      animation: fadeUp 0.8s 0.45s ease both;
+    }
+
+    .hero-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 40px;
+      position: relative;
+    }
+
+    .photo-frame {
+      position: relative;
+      animation: fadeUp 0.9s 0.3s ease both;
+    }
+
+    .photo-frame::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: -20px;
+      bottom: -20px;
+      border: 2px solid var(--accent);
+      border-radius: 4px;
+      z-index: 0;
+    }
+
+    .photo-frame img {
+      width: 260px;
+      height: 320px;
+      object-fit: cover;
+      border-radius: 4px;
+      position: relative;
+      z-index: 1;
+      display: block;
+      filter: grayscale(20%);
+    }
+
+    .photo-placeholder {
+      width: 260px;
+      height: 320px;
+      background: linear-gradient(135deg, #2a2a3e, #1a1a2e);
+      border-radius: 4px;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed rgba(200,150,62,0.4);
+      gap: 12px;
+    }
+
+    .photo-placeholder svg {
+      width: 48px;
+      height: 48px;
+      opacity: 0.4;
+      color: var(--accent);
+    }
+
+    .photo-placeholder p {
+      color: rgba(255,255,255,0.35);
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .photo-placeholder code {
+      color: var(--accent);
+      font-size: 11px;
+      background: rgba(200,150,62,0.1);
+      padding: 4px 10px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+
+    /* ─── SECTION WRAPPER ─── */
+    .section {
+      padding: 100px 10vw;
+      position: relative;
+    }
+
+    .section:nth-child(even) {
+      background: var(--white);
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Architects Daughter', cursive;
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 50px;
+      position: relative;
+      padding-bottom: 20px;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: var(--accent);
+    }
+
+    /* ─── ABOUT ─── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-text {
+      font-size: 17px;
+      line-height: 1.85;
+      color: #444;
+      font-weight: 300;
+    }
+
+    .about-text strong {
+      color: var(--dark);
+      font-weight: 500;
+    }
+
+    .about-stat-group {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .stat-card {
+      padding: 28px 30px;
+      background: var(--cream);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+    }
+
+    .stat-card .stat-num {
+      font-family: 'Architects Daughter', cursive;
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--accent);
+    }
+
+    .stat-card .stat-label {
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* ─── PERSONAL DETAILS ─── */
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .detail-item {
+      background: var(--cream);
+      border-radius: 8px;
+      padding: 28px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border-top: 3px solid transparent;
+      transition: border-color 0.3s, transform 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .detail-item::before {
+      content: '';
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 60px; height: 60px;
+      background: var(--accent);
+      opacity: 0.05;
+      border-radius: 50% 0 0 0;
+      transform: scale(0);
+      transition: transform 0.4s;
+    }
+
+    .detail-item:hover {
+      border-top-color: var(--accent);
+      transform: translateY(-4px);
+    }
+
+    .detail-item:hover::before { transform: scale(3); }
+
+    .detail-key {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .detail-value {
+      font-size: 17px;
+      color: var(--dark);
+      font-weight: 400;
+    }
+
+    /* ─── SKILLS ─── */
+    .skills-section { background: var(--dark); }
+    .skills-section .section-label { color: var(--accent); }
+    .skills-section .section-title { color: var(--black); }
+    .skills-section .section-title::after { background: var(--accent); }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .skill-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 30px 24px;
+      text-align: center;
+      transition: background 0.3s, border-color 0.3s, transform 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transition: transform 0.35s ease;
+      transform-origin: left;
+    }
+
+    .skill-card:hover {
+      background: rgba(200,150,62,0.08);
+      border-color: rgba(200,150,62,0.3);
+      transform: translateY(-6px);
+    }
+
+    .skill-card:hover::after { transform: scaleX(1); }
+
+    .skill-icon {
+      font-size: 30px;
+      margin-bottom: 14px;
+    }
+
+    .skill-name {
+      font-family: 'Architects Daughter', cursive;
+      font-size: 20px;
+      color: black;
+      margin-bottom: 6px;
+    }
+
+    .skill-level {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .skill-desc {
+      margin-top: 12px;
+      font-size: 13px;
+      color: black;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    /* ─── INSPIRATION ─── */
+    .inspiration-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .quote-mark {
+      font-family: 'Architects Daughter', cursive;
+      font-size: 120px;
+      line-height: 0.5;
+      color: var(--accent);
+      opacity: 0.2;
+      display: block;
+      margin-bottom: 30px;
+    }
+
+    .inspiration-text {
+      font-size: 19px;
+      line-height: 1.9;
+      color: #555;
+      font-weight: 300;
+      font-style: italic;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--dark);
+      padding: 40px 10vw;
+      text-align: center;
+      color: rgba(255,255,255,0.3);
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+
+    footer span { color: var(--accent); }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+      .hero-left {
+        clip-path: none;
+        padding: 60px 30px 40px;
+      }
+      .hero-right { padding: 40px 30px 60px; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .section { padding: 70px 6vw; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ HERO / PROFILE ══════════ -->
+<section class="hero">
+  <div class="hero-left">
+    <span class="hero-tag">BS Information Technology</span>
+    <h1 class="hero-name">
+      John Emmanuel Calibuso<br/>
+      <span>Campo</span>
+    </h1>
+    <p class="hero-subtitle">Aspiring Web Developer &nbsp;·&nbsp; Future IT Professional</p>
+    <div class="hero-divider"></div>
+  </div>
+
+  <div class="hero-right">
+    <div class="photo-frame">
+      <!--
+        ╔══════════════════════════════════════════════════╗
+        ║  REPLACE THIS PLACEHOLDER WITH YOUR 2x2 PHOTO   ║
+        ║  Example:                                        ║
+        ║  <img src="your-photo.jpg" alt="Your Name" />   ║
+        ╚══════════════════════════════════════════════════╝
+      -->
+      <div class="photo-placeholder">
+        <img src="123.jpg" alt="Your Name" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ABOUT ME ══════════ -->
+<section class="section" id="about">
+  <p class="section-label reveal">Who I Am</p>
+  <h2 class="section-title reveal">About Me</h2>
+  <div class="about-grid">
+    <p class="about-text reveal">
+      I am <strong>John Emmanuel Calibuso Campo</strong>, a passionate 
+      <strong>BS Information Technology</strong> student at 
+      <strong>Our Lady of the Sacred Heart College of Guimba, Inc.</strong>
+      I have a deep interest in technology, particularly in 
+      <strong>web development and software engineering</strong>. 
+      I believe that technology has the power to solve real-world problems 
+      and I am committed to developing the skills needed to make a meaningful 
+      contribution to the IT industry. I continuously seek opportunities to 
+      grow, learn, and collaborate with like-minded individuals who share the 
+      same passion for innovation.
+    </p>
+    <div class="about-stat-group reveal">
+      <div class="stat-card">
+        <div class="stat-num">BSIT</div>
+        <div class="stat-label">Course</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">OLSHCO</div>
+        <div class="stat-label">School</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">HCI101</div>
+        <div class="stat-label">Current Subject</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ PERSONAL DETAILS ══════════ -->
+<section class="section" id="details">
+  <p class="section-label reveal">The Basics</p>
+  <h2 class="section-title reveal">Personal Details</h2>
+  <div class="details-grid">
+    <div class="detail-item reveal">
+      <span class="detail-key">Full Name</span>
+      <span class="detail-value">John Emmanuel Calibuso Campo</span>
+    </div>
+    <div class="detail-item reveal">
+      <span class="detail-key">Age</span>
+      <span class="detail-value">19 years old</span>
+    </div>
+    <div class="detail-item reveal">
+      <span class="detail-key">Email Address</span>
+      <span class="detail-value">campojohnemmanuel513@gmail.com</span>
+    </div>
+    <div class="detail-item reveal">
+      <span class="detail-key">Address</span>
+      <span class="detail-value">Sto. Cristo, Guimba, Nueva Ecija</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ SKILLS ══════════ -->
+<section class="section skills-section" id="skills">
+  <p class="section-label reveal">What I Know</p>
+  <h2 class="section-title reveal">Skills &amp; Programming Languages</h2>
+  <div class="skills-grid">
+
+    <div class="skill-card reveal">
+      <div class="skill-icon">🌐</div>
+      <div class="skill-name">HTML</div>
+      <div class="skill-level">Intermediate</div>
+      <p class="skill-desc">I can build structured web pages using semantic HTML tags, forms, tables, and links. I understand the basics of page layout and document structure.</p>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="skill-icon">🎨</div>
+      <div class="skill-name">CSS</div>
+      <div class="skill-level">Beginner</div>
+      <p class="skill-desc">I can style web pages with colors, fonts, and basic layouts. I am currently learning flexbox and responsive design techniques.</p>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="skill-icon">⚡</div>
+      <div class="skill-name">JavaScript</div>
+      <div class="skill-level">Beginner</div>
+      <p class="skill-desc">I have a foundational understanding of variables, functions, and basic DOM manipulation. Still exploring the language through practice.</p>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="skill-icon">🐍</div>
+      <div class="skill-name">Python</div>
+      <div class="skill-level">Beginner</div>
+      <p class="skill-desc">I know basic Python syntax, loops, and conditionals. I have used it for simple programs and introductory exercises in school.</p>
+    </div>
+
+    <!-- Add or remove skill cards as needed -->
+
+  </div>
+</section>
+
+<!-- ══════════ INSPIRATION ══════════ -->
+<section class="section" id="inspiration">
+  <p class="section-label reveal" style="text-align:center">My Drive</p>
+  <h2 class="section-title reveal" style="text-align:center; margin: 0 auto 50px;">
+    Inspiration as a Programmer
+  </h2>
+  <h2 class="section-title" style="width:fit-content; margin: 0 auto 50px;"></h2>
+  <div class="inspiration-wrap reveal">
+    <span class="quote-mark">"</span>
+    <p class="inspiration-text">
+      What inspires me most about programming is its ability to turn ideas into 
+      reality. I chose the IT field because I have always been fascinated by 
+      how technology shapes the world around us, from the apps we use daily to 
+      the systems that power entire industries. For me, every line of code is a 
+      small step toward building something meaningful. I want to use my skills to 
+      create solutions that make people's lives easier, and that drive is what 
+      keeps me learning every single day.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <p>Crafted by <span>John Emmanuel C. Campo</span> &nbsp;·&nbsp; BSIT · OLSHCO &nbsp;·&nbsp; HCI101</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
